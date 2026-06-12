@@ -3,3 +3,6 @@ export * from "./parser.js";
 export * from "./redactor.js";
 export * from "./cassette.js";
 export * from "./reporters.js";
+export * from "./replay.js";
+export * from "./commands.js";
+export * from "./demo.js";
