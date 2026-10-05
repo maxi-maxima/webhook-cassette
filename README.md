@@ -8,7 +8,7 @@
 
 </div>
 
-`webhook-cassette` is a local-first CLI for turning real webhook samples into safe, replayable test cassettes. It reads raw HTTP text or JSON request samples, normalizes headers and bodies, redacts secrets, and writes fixtures you can commit and replay in CI.
+`webhook-cassette` is a local-first CLI for turning real webhook samples into safe, replayable test cassettes. It reads raw HTTP text or JSON request samples, normalizes headers and bodies, redacts secrets from query strings, headers, and bodies, and writes fixtures you can commit and replay in CI.
 
 It is not a hosted webhook inbox or public relay.
 

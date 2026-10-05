@@ -8,7 +8,7 @@
 
 </div>
 
-`webhook-cassette` 是一个本地优先 CLI，用来把真实 webhook 样本变成安全、可重放、可提交到仓库的测试 cassette。它读取 raw HTTP 文本或 JSON 请求样本，归一化 headers 和 body，脱敏密钥，并写出可在 CI 中重放的 fixture。
+`webhook-cassette` 是一个本地优先 CLI，用来把真实 webhook 样本变成安全、可重放、可提交到仓库的测试 cassette。它读取 raw HTTP 文本或 JSON 请求样本，归一化 headers 和 body，脱敏查询参数、headers 和 body 中的密钥，并写出可在 CI 中重放的 fixture。
 
 它不是托管 webhook inbox，也不是公网 relay。
 

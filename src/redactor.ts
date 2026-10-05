@@ -5,6 +5,7 @@ const VALUE_PATTERNS = [/bearer\s+[a-z0-9._-]+/iu, /gh[pousr]_[a-z0-9_]+/iu, /sk
 
 export function redactRequest(request: RecordedRequest): { request: RecordedRequest; redactions: Redaction[] } {
   const redactions: Redaction[] = [];
+  const path = redactPath(request.path, redactions);
   const headers: Record<string, string> = {};
   for (const [key, value] of Object.entries(request.headers)) {
     const path = `headers.${key}`;
@@ -17,9 +18,36 @@ export function redactRequest(request: RecordedRequest): { request: RecordedRequ
   }
   const body = redactValue(request.body, "body", redactions);
   return {
-    request: { ...request, headers, body },
+    request: { ...request, path, headers, body },
     redactions
   };
+}
+
+function redactPath(path: string, redactions: Redaction[]): string {
+  const queryStart = path.indexOf("?");
+  if (queryStart < 0) {
+    return path;
+  }
+
+  const fragmentStart = path.indexOf("#", queryStart);
+  const queryEnd = fragmentStart < 0 ? path.length : fragmentStart;
+  const output = new URLSearchParams();
+  let changed = false;
+
+  for (const [key, value] of new URLSearchParams(path.slice(queryStart + 1, queryEnd))) {
+    if (isSensitiveKey(key) || isSensitiveValue(value)) {
+      output.append(key, "[REDACTED]");
+      redactions.push({ path: `path.query.${key}`, reason: reasonFor(key, value) });
+      changed = true;
+    } else {
+      output.append(key, value);
+    }
+  }
+
+  if (!changed) {
+    return path;
+  }
+  return `${path.slice(0, queryStart)}?${output.toString()}${fragmentStart < 0 ? "" : path.slice(fragmentStart)}`;
 }
 
 function redactValue(value: unknown, path: string, redactions: Redaction[]): unknown {

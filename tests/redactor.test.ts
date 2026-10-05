@@ -32,4 +32,23 @@ describe("redactRequest", () => {
       expect.arrayContaining(["headers.authorization", "headers.stripe-signature", "body.email", "body.nested.api_key"])
     );
   });
+
+  test("redacts sensitive query parameters without changing safe values", () => {
+    const request: RecordedRequest = {
+      method: "POST",
+      path: "/webhook?api_key=sk_live_secret&event=evt_123&email=user%40example.com#debug",
+      headers: {},
+      body: null
+    };
+
+    const result = redactRequest(request);
+
+    expect(result.request.path).toBe(
+      "/webhook?api_key=%5BREDACTED%5D&event=evt_123&email=%5BREDACTED%5D#debug"
+    );
+    expect(result.redactions.map((redaction) => redaction.path)).toEqual([
+      "path.query.api_key",
+      "path.query.email"
+    ]);
+  });
 });
