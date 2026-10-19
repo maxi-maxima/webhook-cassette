@@ -5,7 +5,10 @@ export async function replayCassette(cassette: WebhookCassette, targetUrl: strin
   for (const request of cassette.requests) {
     const url = new URL(targetUrl);
     if (request.path && request.path !== "/") {
-      url.pathname = request.path;
+      const recordedUrl = new URL(request.path, url.origin);
+      url.pathname = recordedUrl.pathname;
+      url.search = recordedUrl.search;
+      url.hash = recordedUrl.hash;
     }
     if (dryRun) {
       results.push({ method: request.method, url: url.toString(), ok: true, dryRun: true });

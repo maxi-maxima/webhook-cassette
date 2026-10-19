@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Preserve recorded query strings when replaying webhook cassettes.
+
 ## 0.1.0 - 2026-06-12
 
 - Initial public release.

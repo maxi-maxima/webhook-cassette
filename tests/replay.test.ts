@@ -16,4 +16,15 @@ describe("replayCassette", () => {
 
     expect(results).toEqual([{ method: "POST", url: "http://127.0.0.1:3000/webhook", ok: true, dryRun: true }]);
   });
+
+  test("preserves recorded query strings", async () => {
+    const withQuery: WebhookCassette = {
+      ...cassette,
+      requests: [{ ...cassette.requests[0]!, path: "/webhook?event=paid&attempt=2" }]
+    };
+
+    const results = await replayCassette(withQuery, "http://127.0.0.1:3000/webhook", true);
+
+    expect(results[0]?.url).toBe("http://127.0.0.1:3000/webhook?event=paid&attempt=2");
+  });
 });
