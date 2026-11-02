@@ -14,9 +14,11 @@ export async function replayCassette(cassette: WebhookCassette, targetUrl: strin
       results.push({ method: request.method, url: url.toString(), ok: true, dryRun: true });
       continue;
     }
+    const headers = new Headers(request.headers);
+    headers.delete("content-length");
     const response = await fetch(url, {
       method: request.method,
-      headers: request.headers,
+      headers,
       body: request.body === null || request.body === undefined ? undefined : typeof request.body === "string" ? request.body : JSON.stringify(request.body)
     });
     results.push({ method: request.method, url: url.toString(), status: response.status, ok: response.ok, dryRun: false });

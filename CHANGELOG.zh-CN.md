@@ -3,6 +3,7 @@
 ## 未发布
 
 - 重放 webhook cassette 时保留已录制的查询字符串。
+- 重放前移除已录制的 `Content-Length` header，确保序列化后的正文使用正确长度。
 - 将 CI 的 checkout 和 Node setup action 升级到 Node 24 运行时版本。
 
 ## 0.1.0 - 2026-06-12

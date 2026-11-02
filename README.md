@@ -38,6 +38,8 @@ Dry-run replay:
 webhook-cassette replay cassettes/stripe.json --url http://127.0.0.1:3000/webhook --dry-run
 ```
 
+Replay drops the recorded `Content-Length` header so the HTTP client recalculates it after redaction and JSON serialization.
+
 Generate demo assets:
 
 ```bash

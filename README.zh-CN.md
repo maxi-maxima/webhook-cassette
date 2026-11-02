@@ -38,6 +38,8 @@ webhook-cassette inspect cassettes/stripe.json
 webhook-cassette replay cassettes/stripe.json --url http://127.0.0.1:3000/webhook --dry-run
 ```
 
+重放时会移除已录制的 `Content-Length` header，让 HTTP 客户端在脱敏和 JSON 序列化后重新计算长度。
+
 生成演示资产：
 
 ```bash
